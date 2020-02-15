@@ -1,9 +1,9 @@
-from yahoo_finance import Share
+from yahoo_fin.stock_info import get_live_price, get_quote_table
 
 
 class Stock:
     def __init__(self, ticker, buy_in_price=None, amount=1):
-        self.ticker = Share(ticker)
+        self.ticker = ticker
         self.amount = amount
         self.buy_in_price = buy_in_price
         if buy_in_price is None:
@@ -15,18 +15,15 @@ class Stock:
     # fetch
     @property
     def price(self):
-        self.ticker.refresh()
-        return self.ticker.get_price()
+        return get_live_price(self.ticker)
 
     @property
     def open(self):
-        self.ticker.refresh()
-        return self.ticker.get_open()
+        return get_quote_table(self.ticker)['Open']
 
     @property
     def close(self):
-        self.ticker.refresh()
-        return self.ticker.get_prev_close()
+        return get_quote_table(self.ticker)['Previous Close']
 
     # totals
     @property
