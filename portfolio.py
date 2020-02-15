@@ -10,7 +10,6 @@ class Portfolio(list):
         self.append(Stock(ticker_name, buy_in_price, amount))
         
     def update(self):
-        # this function needs to be cleaned up
         updated_tickers = {}
         for stock in self:
             if stock.ticker in updated_tickers:
@@ -21,6 +20,7 @@ class Portfolio(list):
 
     @property
     def is_open(self):
+        # TODO this function is meant to check if market is open or closed
         return None
 
     @property

@@ -6,14 +6,14 @@ class Stock:
         self.ticker = ticker.upper()
         self.amount = amount
         self.buy_in_price = buy_in_price
-        
+
+        if buy_in_price is None:
+            self.buy_in_price = self._live
+
         # these values are stored instead of live as each api request takes 0.5 seconds
         self._live = get_live_price(self.ticker)
         self._table = get_quote_table(self.ticker)
         
-        if buy_in_price is None:
-            self.buy_in_price = self._live
-            
     def __eq__(self, other):
         return self.ticker == other.ticker
 
@@ -26,10 +26,13 @@ class Stock:
 
     # fetch
     def update(self):
-        print(self.ticker, 'updated')
         self._live = get_live_price(self.ticker)
         self._table = get_quote_table(self.ticker)
         return (self._live, self._table)
+
+    def is_open(self):
+        # TODO this function is meant to check if the market for this stock is open or closed
+        return None
     
     @property
     def price(self):
