@@ -3,27 +3,45 @@ from yahoo_fin.stock_info import get_live_price, get_quote_table
 
 class Stock:
     def __init__(self, ticker, buy_in_price=None, amount=1):
-        self.ticker = ticker
+        self.ticker = ticker.upper()
         self.amount = amount
         self.buy_in_price = buy_in_price
+        
+        # these values are stored instead of live as each api request takes 0.5 seconds
+        self._live = get_live_price(self.ticker)
+        self._table = get_quote_table(self.ticker)
+        
         if buy_in_price is None:
-            self.buy_in_price = self.price
+            self.buy_in_price = self._live
+            
+    def __eq__(self, other):
+        return self.ticker == other.ticker
 
     def __repr__(self):
-        return "{0} {1} at {2}".format(self.amount, self.ticker, self.price)
+        return "{0} {1} @ {2}".format(self.amount, self.ticker, self.price)
+
+    def set_values(self, price, table):
+        self._live = price
+        self._table = table
 
     # fetch
+    def update(self):
+        print(self.ticker, 'updated')
+        self._live = get_live_price(self.ticker)
+        self._table = get_quote_table(self.ticker)
+        return (self._live, self._table)
+    
     @property
     def price(self):
-        return get_live_price(self.ticker)
+        return round(self._live, 2)
 
     @property
     def open(self):
-        return get_quote_table(self.ticker)['Open']
+        return round(self._table['Open'], 2)
 
     @property
     def close(self):
-        return get_quote_table(self.ticker)['Previous Close']
+        return round(self._table['Previous Close'], 2)
 
     # totals
     @property
@@ -45,12 +63,12 @@ class Stock:
     # day
     @property
     def day_change(self):
-        return self.open - self.close
+        return round(self.price - self.close, 2)
 
     @property
     def day_change_total(self):
-        return self.day_change * self.amount
+        return round(self.day_change * self.amount, 2)
 
     @property
     def day_change_percent(self):
-        return int(100 * self.day_change/self.close)
+        return round(100 * self.day_change/self.close, 2)
