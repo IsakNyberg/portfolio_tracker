@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from yahoo_fin.stock_info import get_live_price, get_quote_table
 
 

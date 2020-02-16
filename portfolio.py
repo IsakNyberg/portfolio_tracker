@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from stock import Stock
 
 
@@ -14,7 +16,7 @@ class Portfolio(list):
         with open(path, "a") as saveFile:  # recreate new file
             saveFile.write('\n'.join(data))  # puts massive string in file
 
-    def import_tasks(self):
+    def load(self):
         with open('data_{0}.txt'.format(self.name)) as file:
             for stock in file:
                 data = stock.rstrip().split("_")
