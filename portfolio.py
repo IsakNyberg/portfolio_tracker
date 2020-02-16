@@ -17,7 +17,7 @@ class Portfolio(list):
     def import_tasks(self):
         with open('data_{0}.txt'.format(self.name)) as file:
             for stock in file:
-                data = line.rstrip().split("_")
+                data = stock.rstrip().split("_")
                 self.add(data[0], float(data[1]), int(data[2]))
 
     def add(self, ticker_name, buy_in_price=None, amount=1):

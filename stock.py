@@ -28,12 +28,12 @@ class Stock:
     def update(self):
         self._live = round(get_live_price(self.ticker), 2)
         self._table = get_quote_table(self.ticker)
-        return (self._live, self._table)
+        return self._live, self._table
 
     def is_open(self):
         # TODO this function is meant to check if the market for this stock is open or closed
         return None
-    
+
     @property
     def price(self):
         return round(self._live, 2)
