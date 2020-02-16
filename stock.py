@@ -11,7 +11,7 @@ class Stock:
             self.buy_in_price = self._live
 
         # these values are stored instead of live as each api request takes 0.5 seconds
-        self._live = get_live_price(self.ticker)
+        self._live = round(get_live_price(self.ticker), 2)
         self._table = get_quote_table(self.ticker)
         
     def __eq__(self, other):
@@ -26,7 +26,7 @@ class Stock:
 
     # fetch
     def update(self):
-        self._live = get_live_price(self.ticker)
+        self._live = round(get_live_price(self.ticker), 2)
         self._table = get_quote_table(self.ticker)
         return (self._live, self._table)
 

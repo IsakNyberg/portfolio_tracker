@@ -127,3 +127,4 @@ dmypy.json
 *.iml
 .DS_Store
 tester.py
+data_tester.txt
