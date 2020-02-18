@@ -62,7 +62,7 @@ class Stock:
 
     @property
     def change_percent(self):
-        return int(100 * self.change / self.buy_in_price)
+        return round(100 * self.change / self.buy_in_price, 2)
 
     # day
     @property
