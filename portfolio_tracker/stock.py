@@ -9,12 +9,11 @@ class Stock:
         self.amount = amount
         self.buy_in_price = buy_in_price
 
+        # these values are stored instead of live as each api request takes 0.5 seconds
+        self._live, self._table = self.update()
+
         if buy_in_price is None:
             self.buy_in_price = self._live
-
-        # these values are stored instead of live as each api request takes 0.5 seconds
-        self._live = round(get_live_price(self.ticker), 2)
-        self._table = get_quote_table(self.ticker)
         
     def __eq__(self, other):
         return self.ticker == other.ticker
@@ -28,7 +27,7 @@ class Stock:
 
     # fetch
     def update(self):
-        self._live = round(get_live_price(self.ticker), 2)
+        self._live = float(round(get_live_price(self.ticker), 2)) # get_live_price returns numpy.float64
         self._table = get_quote_table(self.ticker)
         return self._live, self._table
 
