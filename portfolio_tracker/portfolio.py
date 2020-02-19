@@ -1,16 +1,18 @@
 #!/usr/bin/env python
+import requests
+import json
 
 from stock import Stock
 
-
 class Portfolio(list):
-    def __init__(self, name):
+    def __init__(self, name, api_token):
         super().__init__()
+        self.api_token = api_token
         self.name = name
 
     def save(self):
         path = 'data_{0}.txt'.format(self.name)
-        data = ['{0}_{1}_{2}'.format(stock.ticker, round(stock.buy_in_price, 2), stock.amount) for stock in self]
+        data = ['{0}_{1}_{2}'.format(stock.symbol, round(stock.buy_in_price, 2), stock.amount) for stock in self]
 
         open(path, 'w').close()  # delete old file
         with open(path, "a") as saveFile:  # recreate new file
@@ -22,20 +24,33 @@ class Portfolio(list):
                 data = stock.rstrip().split("_")
                 self.add(data[0], float(data[1]), int(data[2]))
 
-    def add(self, ticker_name, buy_in_price=None, amount=1):
-        self.append(Stock(ticker_name, buy_in_price, amount))
+    def add(self, symbol_name, buy_in_price=None, amount=1):
+        self.append(Stock(symbol_name, buy_in_price, amount))
+
+    def fetch(self):
+        url = 'https://api.worldtradingdata.com/api/v1/stock'
+        symbols = set(stock.symbol for stock in self)
+        data_table = []
+        while len(symbols):
+            params = {
+              'symbol': ','.join(symbols),
+              'api_token': self.api_token
+            }
+            response = requests.request('GET', url, params=params).json()['data']
+            data_table += response
+
+            for symbol_data in response:
+                symbols.remove(symbol_data['symbol'])
+            
+        return data_table
         
     def update(self):
-        updated_tickers = {}
-        for stock in self:
-            if not stock.ticker in updated_tickers:
-                values = stock.update()
-                updated_tickers[stock.ticker] = values
-                yield "{0} @ {1}".format(stock.ticker, stock.price)
-            else:
-                values = updated_tickers[stock.ticker]
-                stock.set_values(*values)
-                stock
+        data_table = self.fetch()
+
+        for symbol_data in data_table:
+            symbols = [stock for stock in self if stock.symbol == symbol_data['symbol']]
+            for stock in symbols:
+                stock.set_data(symbol_data)
 
     @property
     def is_open(self):
