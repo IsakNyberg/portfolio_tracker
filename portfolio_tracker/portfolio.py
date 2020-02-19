@@ -28,11 +28,14 @@ class Portfolio(list):
     def update(self):
         updated_tickers = {}
         for stock in self:
-            if stock.ticker in updated_tickers:
+            if not stock.ticker in updated_tickers:
+                values = stock.update()
+                updated_tickers[stock.ticker] = values
+                yield "{0} @ {1}".format(stock.ticker, stock.price)
+            else:
                 values = updated_tickers[stock.ticker]
                 stock.set_values(*values)
-            else:
-                updated_tickers[stock.ticker] = stock.update()
+                stock
 
     @property
     def is_open(self):
