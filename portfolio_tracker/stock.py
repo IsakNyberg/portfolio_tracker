@@ -6,7 +6,32 @@ class Stock:
         self.amount = amount
         self.buy_in_price = buy_in_price
 
-        self._data = {}
+        self._data = {
+            "symbol": "Not fetched",
+            "name": "Not fetched",
+            "currency": "USD",
+            "price": "0",
+            "price_open": "0",
+            "day_high": "0",
+            "day_low": "0",
+            "52_week_high": "0",
+            "52_week_low": "0",
+            "day_change": "0",
+            "change_pct": "0",
+            "close_yesterday": "0",
+            "market_cap": "0",
+            "volume": "0",
+            "volume_avg": "0",
+            "shares": "0",
+            "stock_exchange_long": "Not fetched",
+            "stock_exchange_short": "Not fetched",
+            "timezone": "EST",
+            "timezone_name": "America/New_York",
+            "gmt_offset": "-18000",
+            "last_trade_time": "2020-02-19 10:08:03",
+            "pe": "Not fetched",
+            "eps": "Not fetched"
+        }
 
     def __eq__(self, other):
         return self.symbol == other.symbol
