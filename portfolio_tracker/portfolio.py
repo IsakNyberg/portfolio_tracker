@@ -36,15 +36,15 @@ class Portfolio(list):
               'symbol': ','.join(symbols),
               'api_token': self.api_token
             }
-            try:
-                response = requests.request('GET', url, params=params).json()['data']
             
-            except KeyError as e:
-                raise ValueError(response['message'])
+            response = requests.request('GET', url, params=params).json()
+            
+            if 'message' in response:  # worldtradingdata is nice enough to tell us why sth is wrong
+                raise AssertionError(response['message'])
 
-            data_table += response
+            data_table += response['data']
 
-            for symbol_data in response:
+            for symbol_data in response['data']:
                 symbols.remove(symbol_data['symbol'])
             
         return data_table
