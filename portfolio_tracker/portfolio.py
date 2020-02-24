@@ -36,14 +36,14 @@ class Portfolio(list):
               'symbol': ','.join(symbols),
               'api_token': self.api_token
             }
-            response = requests.request('GET', url, params=params).json()['data']
+            response = requests.request('GET', url, params=params).json()
 
             if response is None:
                 raise ValueError("No response from worldtradingdata, you may be out of requests")
 
-            data_table += response
+            data_table += response['data']
 
-            for symbol_data in response:
+            for symbol_data in response['data']:
                 symbols.remove(symbol_data['symbol'])
             
         return data_table
