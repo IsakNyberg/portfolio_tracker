@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+
 class Stock:
     def __init__(self, symbol, buy_in_price=None, amount=1):
         self.symbol = symbol.upper()

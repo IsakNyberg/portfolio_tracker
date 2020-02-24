@@ -37,6 +37,10 @@ class Portfolio(list):
               'api_token': self.api_token
             }
             response = requests.request('GET', url, params=params).json()['data']
+
+            if response is None:
+                raise ValueError("No response from worldtradingdata, you may be out of requests")
+
             data_table += response
 
             for symbol_data in response:
