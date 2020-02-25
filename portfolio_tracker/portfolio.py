@@ -39,7 +39,7 @@ class Portfolio(list):
             
             response = requests.request('GET', url, params=params).json()
             
-            if 'message' in response:  # worldtradingdata is nice enough to tell us why sth is wrong
+            if not 'data' in response:  # worldtradingdata is nice enough to tell us why sth is wrong
                 raise AssertionError(response['message'])
 
             data_table += response['data']
