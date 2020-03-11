@@ -10,6 +10,19 @@ class Portfolio(list):
         self.api_token = api_token
         self.name = name
 
+    def __add__(self, other)
+        if self.api_token != other.api_token:
+            raise ValueError('Cannot add portfolios with different API tokens')
+        new_name = self.name + other.name
+        new = Portfolio(new_name, self.api_token)
+
+        for stock in self:
+            new.append(stock)
+        for stock in other:
+            new.append(other)
+
+        return new
+
     def save(self):
         path = 'data_{0}.txt'.format(self.name)
         data = ['{0}_{1}_{2}'.format(stock.symbol, round(stock.buy_in_price, 2), stock.amount) for stock in self]
@@ -56,11 +69,6 @@ class Portfolio(list):
             symbols = [stock for stock in self if stock.symbol == symbol_data['symbol']]
             for stock in symbols:
                 stock.set_data(symbol_data)
-
-    @property
-    def is_open(self):
-        # TODO this function is meant to check if market is open or closed
-        return None
 
     @property
     def value(self):
