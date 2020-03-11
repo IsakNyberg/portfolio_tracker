@@ -10,7 +10,7 @@ class Portfolio(list):
         self.api_token = api_token
         self.name = name
 
-    def __add__(self, other)
+    def __add__(self, other):
         if self.api_token != other.api_token:
             raise ValueError('Cannot add portfolios with different API tokens')
         new_name = self.name + other.name
