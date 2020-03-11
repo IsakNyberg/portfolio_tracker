@@ -19,7 +19,7 @@ class Portfolio(list):
         for stock in self:
             new.append(stock)
         for stock in other:
-            new.append(other)
+            new.append(stock)
 
         return new
 
