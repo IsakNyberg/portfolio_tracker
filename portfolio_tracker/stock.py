@@ -11,37 +11,44 @@ class Stock:
             "symbol": "Not fetched",
             "name": "Not fetched",
             "currency": "USD",
-            "price": "0",
-            "price_open": "0",
-            "day_high": "0",
-            "day_low": "0",
-            "52_week_high": "0",
-            "52_week_low": "0",
-            "day_change": "0",
-            "change_pct": "0",
-            "close_yesterday": "0",
-            "market_cap": "0",
-            "volume": "0",
-            "volume_avg": "0",
-            "shares": "0",
-            "stock_exchange_long": "Not fetched",
-            "stock_exchange_short": "Not fetched",
+            "price": "-1",
+            "price_open": "-1",
+            "day_high": "-1",
+            "day_low": "-1",
+            "52_week_high": "-1",
+            "52_week_low": "-1",
+            "day_change": "-1",
+            "change_pct": "-1",
+            "close_yesterday": "-1",
+            "market_cap": "-1",
+            "volume": "-1",
+            "volume_avg": "-1",
+            "shares": "-1",
+            "stock_exchange_long": "-1",
+            "stock_exchange_short": "-1",
             "timezone": "EST",
             "timezone_name": "America/New_York",
             "gmt_offset": "-18000",
-            "last_trade_time": "2020-02-19 10:08:03",
-            "pe": "Not fetched",
-            "eps": "Not fetched"
+            "last_trade_time": "1990-01-01 09:30:01",
+            "pe": "0",
+            "eps": "0"
         }
 
     def __eq__(self, other):
         return self.symbol == other.symbol
 
     def __repr__(self):
-        return '{0} {1} @ {2}'.format(self.amount, self.symbol, 00)#self.price)
+        return '{0} {1} @ {2}'.format(self.amount, self.symbol, self.price)
 
     def set_data(self, data):
         self._data = data
+        error = False
+        for fetched_value in ['price', 'price_open', 'close_yesterday', 'day_change']:
+            if self._data[fetched_value] == 'N/A':
+                self._data[fetched_value] = '-1'
+                error = True
+                
+        return error
 
     @property
     def price(self):

@@ -64,11 +64,15 @@ class Portfolio(list):
         
     def update(self):
         data_table = self.fetch()
-
+        error = False
         for symbol_data in data_table:
             symbols = [stock for stock in self if stock.symbol == symbol_data['symbol']]
             for stock in symbols:
-                stock.set_data(symbol_data)
+                if stock.set_data(symbol_data):  # updates stock returns True if error
+                    error = True
+
+        if error:
+            raise ValueError('Stock failed to update. (Possibly due to Circuit Breaker)')
 
     @property
     def value(self):
